@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx ts-node src/server.ts",
-    "dev-simple": "npx ts-node src/server-simple.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
