@@ -2,6 +2,14 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Cart } from '../models/Cart';
 
+export const getCartItem = async (req: Request, res: Response) => {
+  const cart = await Cart.findOne();
+  if (!cart) return res.status(404).json({ error: 'Cart not found' });
+  const item = cart.items.id(req.params.id);
+  if (!item) return res.status(404).json({ error: 'Item not found' });
+  res.json({ id: item._id, productId: item.productId, quantity: item.quantity });
+};
+
 export const getCart = async (req: Request, res: Response) => {
   let cart = await Cart.findOne();
   if (!cart) cart = new Cart({ items: [] });

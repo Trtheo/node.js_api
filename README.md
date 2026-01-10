@@ -93,6 +93,11 @@ DELETE http://localhost:3060/api/products/{productId}
 GET http://localhost:3060/api/cart
 ```
 
+### GET Cart Item by ID
+```
+GET http://localhost:3060/api/cart/items/{itemId}
+```
+
 ### POST Add Item to Cart
 ```
 POST http://localhost:3060/api/cart/items
@@ -123,4 +128,9 @@ DELETE http://localhost:3060/api/cart/items/{itemId}
 ```
 DELETE http://localhost:3060/api/cart
 ```
+
+## Sample UUIDs for Testing
+- Category ID: `550e8400-e29b-41d4-a716-446655440000`
+- Product ID: `6ba7b810-9dad-11d1-80b4-00c04fd430c8`
+- Item ID: `6ba7b812-9dad-11d1-80b4-00c04fd430c8`
 
