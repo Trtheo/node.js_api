@@ -1,130 +1,456 @@
-# API Endpoints - Postman Requests
+# API Testing - REST Client
 
 ## Categories
 
 ### GET All Categories
-
 GET http://localhost:3061/api/categories
 
-
-### GET Category by ID
-
-GET http://localhost:3061/api/categories/5f0f6218-28b5-4adb-a091-bf0e9e6fa275
-
-
-### POST Create Category
-
+###
+### POST Create Electronics Category
 POST http://localhost:3061/api/categories
 Content-Type: application/json
 
 {
-  "name": "Electronics",
-  "description": "Electronic devices and accessories"
+  "name": "IBiryo",
+  "description": "ibirayi , amateke, imbetezi"
 }
 
-
-### PUT Update Category
-
-PUT http://localhost:3061/api/categories/59427922-e4fd-4cc6-bfca-7f944facd31b
+###
+### POST Create Clothing Category
+POST http://localhost:3061/api/categories
 Content-Type: application/json
 
 {
-  "name": "Updated Electronics",
-  "description": "Updated description"
+  "name": "Clothing",
+  "description": "Fashion and apparel for all ages"
 }
 
+###
+### POST Create Books Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
 
-### DELETE Category
+{
+  "name": "Books",
+  "description": "Educational books, novels, and digital publications"
+}
 
-DELETE http://localhost:3061/api/categories/{categoryId}
+###
+### POST Create Sports Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
 
+{
+  "name": "Sports",
+  "description": "Sports equipment and fitness accessories"
+}
+
+###
+### POST Create Home & Garden Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Home & Garden",
+  "description": "Home improvement and gardening supplies"
+}
+
+###
+### POST Create Beauty Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Beauty",
+  "description": "Cosmetics, skincare, and personal care products"
+}
+
+###
+### POST Create Automotive Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Automotive",
+  "description": "Car parts, accessories, and maintenance products"
+}
+
+###
+### POST Create Toys Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Toys",
+  "description": "Children's toys, games, and educational materials"
+}
+
+###
+### POST Create Food Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Food",
+  "description": "Groceries, snacks, and gourmet food items"
+}
+
+###
+### POST Create Health Category
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Health",
+  "description": "Health supplements, medical supplies, and wellness products"
+}
+
+###
+### GET Category by ID (replace with actual ID)
+GET http://localhost:3061/api/categories/CATEGORY_ID_HERE
+
+###
+### PUT Update Category (replace with actual ID)
+PUT http://localhost:3061/api/categories/CATEGORY_ID_HERE
+Content-Type: application/json
+
+{
+  "name": "Premium Electronics",
+  "description": "High-end electronic devices and premium accessories"
+}
+
+###
+### DELETE Category (replace with actual ID)
+DELETE http://localhost:3061/api/categories/CATEGORY_ID_HERE
 
 ## Products
 
 ### GET All Products
+GET http://localhost:3061/api/products/c909f8b8-2300-4f25-bac0-e497bb4205c4
 
-GET http://localhost:3061/api/products
-
-
-### GET Product by ID
-
-GET http://localhost:3061/api/products/{productId}
-
-
-### POST Create Product
-
+###
+### POST Create iPhone Product
 POST http://localhost:3061/api/products
 Content-Type: application/json
 
 {
-  "name": "iPhone 15",
-  "price": 999.99,
-  "description": "Latest iPhone model",
-  "categoryId": "5f0f6218-28b5-4adb-a091-bf0e9e6fa275",
+  "name": "iPhone 15 Pro Max",
+  "price": 1199.99,
+  "description": "Latest flagship iPhone with titanium design and A17 Pro chip",
+  "categoryId": "ELECTRONICS_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 25
+}
+
+###
+### POST Create Nike Shoes Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Nike Air Max 270",
+  "price": 150.00,
+  "description": "Comfortable running shoes with Air Max technology",
+  "categoryId": "CLOTHING_CATEGORY_ID",
   "inStock": true,
   "quantity": 50
 }
 
-
-### PUT Update Product
-
-PUT http://localhost:3061/api/products/{productId}
+###
+### POST Create Book Product
+POST http://localhost:3061/api/products
 Content-Type: application/json
 
 {
-  "name": "iPhone 15 Pro",
-  "price": 1199.99,
-  "description": "Updated iPhone model",
-  "categoryId": "{categoryId}",
+  "name": "JavaScript: The Complete Guide",
+  "price": 45.99,
+  "description": "Comprehensive JavaScript programming book for developers",
+  "categoryId": "5f0f6218-28b5-4adb-a091-bf0e9e6fa275",
   "inStock": true,
   "quantity": 30
 }
 
+###
+### POST Create Tennis Racket Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
 
-### DELETE Product
+{
+  "name": "Wilson Tennis Racket",
+  "price": 89.99,
+  "description": "Professional tennis racket for intermediate players",
+  "categoryId": "7597980b-b5e3-41e8-bc4c-776a2d3644e2",
+  "inStock": true,
+  "quantity": 15
+}
 
-DELETE http://localhost:3061/api/products/{productId}
+###
+### POST Create Garden Sprinkler Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
 
+{
+  "name": "Smart Garden Sprinkler",
+  "price": 199.99,
+  "description": "WiFi-enabled automatic sprinkler system",
+  "categoryId": "HOME_GARDEN_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 12
+}
+
+###
+### POST Create Face Cream Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Organic Face Cream",
+  "price": 35.50,
+  "description": "Natural anti-aging face cream with organic ingredients",
+  "categoryId": "BEAUTY_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 40
+}
+
+###
+### POST Create Phone Mount Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Car Phone Mount",
+  "price": 24.99,
+  "description": "Universal smartphone holder for car dashboard",
+  "categoryId": "AUTOMOTIVE_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 75
+}
+
+###
+### POST Create LEGO Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "LEGO Creator Set",
+  "price": 79.99,
+  "description": "3-in-1 building set for creative construction",
+  "categoryId": "TOYS_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 20
+}
+
+###
+### POST Create Honey Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Organic Honey",
+  "price": 18.99,
+  "description": "Pure organic wildflower honey, 500g jar",
+  "categoryId": "FOOD_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 60
+}
+
+###
+### POST Create Vitamin Product
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Vitamin D3 Supplements",
+  "price": 22.50,
+  "description": "High-potency vitamin D3 capsules, 90 count",
+  "categoryId": "HEALTH_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 100
+}
+
+###
+### GET Product by ID (replace with actual ID)
+GET http://localhost:3061/api/products/145456e9-1b2a-4ca9-a707-14b4b3818818
+
+###
+### PUT Update Product (replace with actual ID)
+PUT http://localhost:3061/api/products/PRODUCT_ID_HERE
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro Max - Sale",
+  "price": 1099.99,
+  "description": "Special discount on flagship iPhone",
+  "categoryId": "ELECTRONICS_CATEGORY_ID",
+  "inStock": true,
+  "quantity": 20
+}
+
+###
+### DELETE Product (replace with actual ID)
+DELETE http://localhost:3061/api/products/PRODUCT_ID_HERE
 
 ## Cart
 
 ### GET Cart
 GET http://localhost:3061/api/cart
 
-
-### GET Cart Item by ID
-
-GET http://localhost:3060/api/cart/items/{itemId}
-
-
-### POST Add Item to Cart
+###
+### POST Add iPhone to Cart
 POST http://localhost:3061/api/cart/items
 Content-Type: application/json
 
 {
-  "productId": "{productId}",
+  "productId": "IPHONE_PRODUCT_ID",
+  "quantity": 1
+}
+
+###
+### POST Add Nike Shoes to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "NIKE_PRODUCT_ID",
   "quantity": 2
 }
 
+###
+### POST Add Book to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
 
-### PUT Update Cart Item
+{
+  "productId": "BOOK_PRODUCT_ID",
+  "quantity": 1
+}
 
-PUT http://localhost:3061/api/cart/items/{itemId}
+###
+### POST Add Tennis Racket to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "RACKET_PRODUCT_ID",
+  "quantity": 1
+}
+
+###
+### POST Add Garden Sprinkler to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "SPRINKLER_PRODUCT_ID",
+  "quantity": 1
+}
+
+###
+### POST Add Face Cream to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "FACE_CREAM_PRODUCT_ID",
+  "quantity": 3
+}
+
+###
+### POST Add Phone Mount to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "PHONE_MOUNT_PRODUCT_ID",
+  "quantity": 2
+}
+
+###
+### POST Add LEGO to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "LEGO_PRODUCT_ID",
+  "quantity": 1
+}
+
+###
+### POST Add Honey to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "HONEY_PRODUCT_ID",
+  "quantity": 4
+}
+
+###
+### POST Add Vitamins to Cart
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "VITAMIN_PRODUCT_ID",
+  "quantity": 2
+}
+
+###
+### GET Cart Item by ID (replace with actual ID)
+GET http://localhost:3061/api/cart/items/CART_ITEM_ID_HERE
+
+###
+### PUT Update Cart Item Quantity (replace with actual ID)
+PUT http://localhost:3061/api/cart/items/CART_ITEM_ID_HERE
 Content-Type: application/json
 
 {
   "quantity": 5
 }
 
+###
+### DELETE Cart Item (replace with actual ID)
+DELETE http://localhost:3061/api/cart/items/CART_ITEM_ID_HERE
 
-### DELETE Cart Item
-
-DELETE http://localhost:3061/api/cart/items/{itemId}
-
-
-### DELETE Clear Cart
-
+###
+### DELETE Clear Entire Cart
 DELETE http://localhost:3061/api/cart
 
+## Validation Examples
 
+### Invalid Price (Negative)
+POST http://localhost:3061/api/products
+Content-Type: application/json
 
+{
+  "name": "Invalid Product",
+  "price": -10.99,
+  "description": "This will fail validation",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 5
+}
+
+###
+### Invalid Quantity (Negative)
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Invalid Product",
+  "price": 29.99,
+  "description": "This will fail validation",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": -5
+}
+
+###
+### Invalid Cart Quantity (Zero)
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 0
+}

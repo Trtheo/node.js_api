@@ -5,13 +5,18 @@ const cartItemSchema = new Schema({
   productId: { type: String, required: true },
   quantity: { 
     type: Number, 
-    required: true,
-    min: [1, 'Quantity must be at least 1']
+    required: [true, 'Quantity is required'],
+    min: [1, 'Quantity must be at least 1'],
+    validate: {
+      validator: Number.isInteger,
+      message: 'Quantity must be a whole number'
+    }
   }
 }, { _id: false });
 
-const cartSchema = new Schema({ // Define the Cart schema
-  items: [cartItemSchema] // Array of cart items
-});
+const cartSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+  items: [cartItemSchema]
+}, { timestamps: true });
 
 export const Cart = model('Cart', cartSchema);

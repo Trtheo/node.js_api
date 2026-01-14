@@ -1,0 +1,278 @@
+### Authentication Workflows
+
+# Register new user
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "name": "John Doe"
+}
+
+### Login user
+POST http://localhost:3061/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+### Get user profile (requires authentication)
+GET http://localhost:3061/api/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Categories Workflow (All require authentication)
+
+# Create Electronics category
+POST http://localhost:3061/api/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Electronic devices, gadgets, and accessories"
+}
+
+# Create Clothing category
+POST http://localhost:3061/api/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Clothing",
+  "description": "Fashion and apparel for all ages"
+}
+
+# Get all categories
+GET http://localhost:3061/api/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Get category by ID
+GET http://localhost:3061/api/categories/{categoryId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Update category
+PUT http://localhost:3061/api/categories/{categoryId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Premium Electronics",
+  "description": "High-end electronic devices and premium accessories"
+}
+
+### Products Workflow (All require authentication)
+
+# Create iPhone product
+POST http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro Max",
+  "price": 1199.99,
+  "description": "Latest flagship iPhone with titanium design and A17 Pro chip",
+  "categoryId": "{electronicsId}",
+  "inStock": true,
+  "quantity": 25
+}
+
+# Create Nike shoes product
+POST http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Nike Air Max 270",
+  "price": 150.00,
+  "description": "Comfortable running shoes with Air Max technology",
+  "categoryId": "{clothingId}",
+  "inStock": true,
+  "quantity": 50
+}
+
+# Get all products
+GET http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Get product by ID
+GET http://localhost:3061/api/products/{productId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Update product
+PUT http://localhost:3061/api/products/{productId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro Max - Sale",
+  "price": 1099.99,
+  "description": "Special discount on flagship iPhone",
+  "categoryId": "{electronicsId}",
+  "inStock": true,
+  "quantity": 20
+}
+
+### Cart Workflow (All require authentication - User-specific)
+
+# Get user's cart
+GET http://localhost:3061/api/cart
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Add iPhone to cart
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "productId": "{iphoneId}",
+  "quantity": 1
+}
+
+# Add Nike shoes to cart
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "productId": "{nikeId}",
+  "quantity": 2
+}
+
+# Get specific cart item
+GET http://localhost:3061/api/cart/items/{itemId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Update cart item quantity
+PUT http://localhost:3061/api/cart/items/{itemId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+# Remove item from cart
+DELETE http://localhost:3061/api/cart/items/{itemId}
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+# Clear entire cart
+DELETE http://localhost:3061/api/cart
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Validation Error Examples
+
+# Invalid email format
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "password123"
+}
+
+# Password too short
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "123"
+}
+
+# Missing required fields
+POST http://localhost:3061/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+# Invalid category name (empty)
+POST http://localhost:3061/api/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "This will fail"
+}
+
+# Invalid product price (negative)
+POST http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Invalid Product",
+  "price": -10.99,
+  "description": "This will fail validation",
+  "categoryId": "{categoryId}",
+  "inStock": true,
+  "quantity": 5
+}
+
+# Invalid product quantity (negative)
+POST http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Invalid Product",
+  "price": 29.99,
+  "description": "This will fail validation",
+  "categoryId": "{categoryId}",
+  "inStock": true,
+  "quantity": -5
+}
+
+# Invalid cart quantity (zero)
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "productId": "{productId}",
+  "quantity": 0
+}
+
+# Non-existent category ID
+POST http://localhost:3061/api/products
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "price": 29.99,
+  "description": "This will fail",
+  "categoryId": "non-existent-id",
+  "inStock": true,
+  "quantity": 5
+}
+
+# Non-existent product ID in cart
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "productId": "non-existent-product-id",
+  "quantity": 1
+}
+
+### Unauthorized Access Examples
+
+# Access categories without token
+GET http://localhost:3061/api/categories
+
+# Access products without token
+GET http://localhost:3061/api/products
+
+# Access cart without token
+GET http://localhost:3061/api/cart
+
+# Invalid token
+GET http://localhost:3061/api/categories
+Authorization: Bearer invalid_token_here

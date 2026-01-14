@@ -1,0 +1,439 @@
+### Authentication & Validation Test Suite
+
+### 1. Register User - Success
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "name": "Test User"
+}
+
+### 2. Register User - Validation Error (Invalid Email)
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "password123",
+  "name": "Test User"
+}
+
+### 3. Register User - Validation Error (Short Password)
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "123",
+  "name": "Test User"
+}
+
+### 4. Register User - Validation Error (Missing Fields)
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test3@example.com"
+}
+
+### 5. Register User - Duplicate Email
+POST http://localhost:3061/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "name": "Duplicate User"
+}
+
+### 6. Login - Success
+POST http://localhost:3061/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### 7. Login - Invalid Credentials
+POST http://localhost:3061/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "wrongpassword"
+}
+
+### 8. Login - Missing Fields
+POST http://localhost:3061/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com"
+}
+
+### 9. Get Profile - Success (Replace TOKEN with actual token from login)
+GET http://localhost:3061/api/auth/profile
+Authorization: Bearer TOKEN
+
+### 10. Get Profile - No Token
+GET http://localhost:3061/api/auth/profile
+
+### 11. Get Profile - Invalid Token
+GET http://localhost:3061/api/auth/profile
+Authorization: Bearer invalid_token_here
+
+### 12. Create Category - Success (Requires Auth)
+POST http://localhost:3061/api/categories
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Electronic devices and gadgets"
+}
+
+### 13. Create Category - No Auth Token
+POST http://localhost:3061/api/categories
+Content-Type: application/json
+
+{
+  "name": "Books",
+  "description": "Books and publications"
+}
+
+### 14. Create Category - Validation Error (Empty Name)
+POST http://localhost:3061/api/categories
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "Invalid category"
+}
+
+### 15. Create Category - Validation Error (Missing Name)
+POST http://localhost:3061/api/categories
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "description": "No name provided"
+}
+
+### 16. Create Category - Duplicate Name
+POST http://localhost:3061/api/categories
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Duplicate category"
+}
+
+### 17. Update Category - Success (Replace CATEGORY_ID)
+PUT http://localhost:3061/api/categories/CATEGORY_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Premium Electronics",
+  "description": "High-end electronics"
+}
+
+### 18. Update Category - No Auth
+PUT http://localhost:3061/api/categories/CATEGORY_ID
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### 19. Delete Category - Success
+DELETE http://localhost:3061/api/categories/CATEGORY_ID
+Authorization: Bearer TOKEN
+
+### 20. Delete Category - No Auth
+DELETE http://localhost:3061/api/categories/CATEGORY_ID
+
+### 21. Create Product - Success
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "iPhone 15",
+  "price": 999.99,
+  "description": "Latest iPhone",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 10
+}
+
+### 22. Create Product - No Auth
+POST http://localhost:3061/api/products
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "price": 1299.99,
+  "description": "Gaming laptop",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 5
+}
+
+### 23. Create Product - Validation Error (Negative Price)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Invalid Product",
+  "price": -10.99,
+  "description": "Negative price",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 5
+}
+
+### 24. Create Product - Validation Error (Negative Quantity)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Invalid Product",
+  "price": 29.99,
+  "description": "Negative quantity",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": -5
+}
+
+### 25. Create Product - Validation Error (Missing Name)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "price": 29.99,
+  "description": "No name",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 5
+}
+
+### 26. Create Product - Validation Error (Missing CategoryId)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Product",
+  "price": 29.99,
+  "description": "No category",
+  "inStock": true,
+  "quantity": 5
+}
+
+### 27. Create Product - Validation Error (Invalid CategoryId)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Product",
+  "price": 29.99,
+  "description": "Invalid category",
+  "categoryId": "non-existent-id",
+  "inStock": true,
+  "quantity": 5
+}
+
+### 28. Create Product - Validation Error (Non-Integer Quantity)
+POST http://localhost:3061/api/products
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "Product",
+  "price": 29.99,
+  "description": "Float quantity",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 5.5
+}
+
+### 29. Update Product - Success
+PUT http://localhost:3061/api/products/PRODUCT_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro",
+  "price": 1199.99,
+  "description": "Updated iPhone",
+  "categoryId": "CATEGORY_ID",
+  "inStock": true,
+  "quantity": 15
+}
+
+### 30. Update Product - No Auth
+PUT http://localhost:3061/api/products/PRODUCT_ID
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "price": 99.99
+}
+
+### 31. Delete Product - Success
+DELETE http://localhost:3061/api/products/PRODUCT_ID
+Authorization: Bearer TOKEN
+
+### 32. Delete Product - No Auth
+DELETE http://localhost:3061/api/products/PRODUCT_ID
+
+### 33. Add to Cart - Success
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 2
+}
+
+### 34. Add to Cart - No Auth
+POST http://localhost:3061/api/cart/items
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 1
+}
+
+### 35. Add to Cart - Validation Error (Zero Quantity)
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 0
+}
+
+### 36. Add to Cart - Validation Error (Negative Quantity)
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": -1
+}
+
+### 37. Add to Cart - Validation Error (Missing ProductId)
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+
+### 38. Add to Cart - Validation Error (Non-Integer Quantity)
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 2.5
+}
+
+### 39. Add to Cart - Product Not Found
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "non-existent-product-id",
+  "quantity": 1
+}
+
+### 40. Add to Cart - Insufficient Stock
+POST http://localhost:3061/api/cart/items
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "productId": "PRODUCT_ID",
+  "quantity": 999999
+}
+
+### 41. Get Cart - Success
+GET http://localhost:3061/api/cart
+Authorization: Bearer TOKEN
+
+### 42. Get Cart - No Auth
+GET http://localhost:3061/api/cart
+
+### 43. Get Cart Item - Success
+GET http://localhost:3061/api/cart/items/ITEM_ID
+Authorization: Bearer TOKEN
+
+### 44. Get Cart Item - No Auth
+GET http://localhost:3061/api/cart/items/ITEM_ID
+
+### 45. Update Cart Item - Success
+PUT http://localhost:3061/api/cart/items/ITEM_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### 46. Update Cart Item - No Auth
+PUT http://localhost:3061/api/cart/items/ITEM_ID
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### 47. Update Cart Item - Validation Error (Zero Quantity)
+PUT http://localhost:3061/api/cart/items/ITEM_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "quantity": 0
+}
+
+### 48. Update Cart Item - Validation Error (Negative Quantity)
+PUT http://localhost:3061/api/cart/items/ITEM_ID
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "quantity": -1
+}
+
+### 49. Delete Cart Item - Success
+DELETE http://localhost:3061/api/cart/items/ITEM_ID
+Authorization: Bearer TOKEN
+
+### 50. Delete Cart Item - No Auth
+DELETE http://localhost:3061/api/cart/items/ITEM_ID
+
+### 51. Clear Cart - Success
+DELETE http://localhost:3061/api/cart
+Authorization: Bearer TOKEN
+
+### 52. Clear Cart - No Auth
+DELETE http://localhost:3061/api/cart
