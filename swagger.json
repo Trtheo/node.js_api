@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-Commerce API",
+    "version": "1.0.0",
+    "description": "Complete API documentation for User, Category, Product, and Cart management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3061",
+      "description": "Development server"
+    }
+  ],
+  "tags": [
+    { "name": "Auth", "description": "User authentication and profile" },
+    { "name": "Categories", "description": "Category management" },
+    { "name": "Products", "description": "Product management" },
+    { "name": "Cart", "description": "Shopping cart operations" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "number", "minimum": 0 },
+          "description": { "type": "string" },
+          "categoryId": { "type": "string" },
+          "inStock": { "type": "boolean" },
+          "quantity": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "productId": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

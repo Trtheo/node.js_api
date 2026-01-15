@@ -1,5 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger';
 import categoriesRouter from './routes/categories';
 import productsRouter from './routes/products';
 import cartRouter from './routes/cart';
@@ -10,6 +12,9 @@ const app = express();
 
 app.use(morgan('combined'));
 app.use(express.json());
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
 app.use('/api/auth', authRouter);
