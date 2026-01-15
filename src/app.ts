@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
 import categoriesRouter from './routes/categories';
@@ -10,6 +11,7 @@ import { errorHandler, notFound } from './middleware/errorHandler';
 
 const app = express();
 
+app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
 

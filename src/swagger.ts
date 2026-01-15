@@ -10,9 +10,12 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        // url: 'http://localhost:3061',
         url: 'https://node-js-api-zw1r.onrender.com',
-        description: 'Development server',
+        description: 'Production',
+      },
+      {
+        url: 'http://localhost:3061',
+        description: 'Local',
       },
     ],
     components: {
