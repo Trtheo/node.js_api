@@ -1,23 +1,30 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 
+const getServers = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  if (isProduction) {
+    return [{
+      url: process.env.PRODUCTION_URL || 'https://node-js-api-zw1r.onrender.com',
+      description: 'Production'
+    }];
+  }
+  
+  return [{
+    url: `http://localhost:${process.env.PORT || 3061}`,
+    description: 'Local Development'
+  }];
+};
+
 const options: swaggerJsdoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'E-Commerce API',
-      version: '1.0.0',
-      description: 'API for managing users, categories, products, and shopping cart',
+      title: 'Complete E-Commerce API',
+      version: '2.0.0',
+      description: 'Full-featured e-commerce REST API with authentication, products, cart, orders, and reviews',
     },
-    servers: [
-      {
-        url: 'https://node-js-api-zw1r.onrender.com',
-        description: 'Production',
-      },
-      {
-        url: 'http://localhost:3061',
-        description: 'Local',
-      },
-    ],
+    servers: getServers(),
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -31,8 +38,30 @@ const options: swaggerJsdoc.Options = {
           type: 'object',
           properties: {
             id: { type: 'string' },
-            username: { type: 'string' },
             email: { type: 'string' },
+            name: { type: 'string' },
+            role: { type: 'string', enum: ['buyer', 'seller', 'admin'] },
+            profile: {
+              type: 'object',
+              properties: {
+                firstName: { type: 'string' },
+                lastName: { type: 'string' },
+                phone: { type: 'string' },
+                avatar: { type: 'string' }
+              }
+            },
+            address: {
+              type: 'object',
+              properties: {
+                street: { type: 'string' },
+                city: { type: 'string' },
+                state: { type: 'string' },
+                zipCode: { type: 'string' },
+                country: { type: 'string' }
+              }
+            },
+            isActive: { type: 'boolean' },
+            emailVerified: { type: 'boolean' },
             createdAt: { type: 'string', format: 'date-time' },
           },
         },
@@ -54,6 +83,14 @@ const options: swaggerJsdoc.Options = {
             categoryId: { type: 'string' },
             inStock: { type: 'boolean' },
             quantity: { type: 'integer' },
+            images: { type: 'array', items: { type: 'string' } },
+            brand: { type: 'string' },
+            sku: { type: 'string' },
+            tags: { type: 'array', items: { type: 'string' } },
+            averageRating: { type: 'number' },
+            reviewCount: { type: 'integer' },
+            featured: { type: 'boolean' },
+            sellerId: { type: 'string' }
           },
         },
         CartItem: {
@@ -62,19 +99,58 @@ const options: swaggerJsdoc.Options = {
             id: { type: 'string' },
             productId: { type: 'string' },
             quantity: { type: 'integer' },
-            product: { $ref: '#/components/schemas/Product' },
           },
         },
-        Cart: {
+        Order: {
           type: 'object',
           properties: {
+            id: { type: 'string' },
+            userId: { type: 'string' },
             items: {
               type: 'array',
-              items: { $ref: '#/components/schemas/CartItem' },
+              items: {
+                type: 'object',
+                properties: {
+                  productId: { type: 'string' },
+                  name: { type: 'string' },
+                  price: { type: 'number' },
+                  quantity: { type: 'integer' }
+                }
+              }
             },
-            total: { type: 'number' },
+            totalAmount: { type: 'number' },
+            status: { type: 'string', enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'] },
+            shippingAddress: {
+              type: 'object',
+              properties: {
+                street: { type: 'string' },
+                city: { type: 'string' },
+                state: { type: 'string' },
+                zipCode: { type: 'string' },
+                country: { type: 'string' }
+              }
+            },
+            orderDate: { type: 'string', format: 'date-time' }
           },
         },
+        Review: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            userId: { type: 'string' },
+            productId: { type: 'string' },
+            rating: { type: 'integer', minimum: 1, maximum: 5 },
+            comment: { type: 'string' },
+            verified: { type: 'boolean' },
+            createdAt: { type: 'string', format: 'date-time' }
+          },
+        },
+        Error: {
+          type: 'object',
+          properties: {
+            error: { type: 'string' }
+          }
+        }
       },
     },
     security: [{ bearerAuth: [] }],

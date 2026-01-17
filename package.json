@@ -1,14 +1,19 @@
 {
-  "name": "crud-api",
-  "version": "1.0.0",
+  "name": "complete-ecommerce-api",
+  "version": "2.0.0",
+  "description": "Complete e-commerce REST API with authentication, products, cart, orders, and reviews",
   "scripts": {
-    "dev": "npx ts-node src/server.ts",
-    "build": "tsc"
+    "dev": "NODE_ENV=development npx ts-node src/server.ts",
+    "start": "NODE_ENV=production node dist/server.js",
+    "build": "tsc",
+    "swagger:dev": "NODE_ENV=development npx ts-node src/server.ts",
+    "swagger:prod": "NODE_ENV=production node dist/server.js"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.9",
+    "@types/nodemailer": "^7.0.5",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -16,6 +21,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^7.8.8",
     "morgan": "^1.10.1",
+    "nodemailer": "^7.0.12",
     "nodemon": "^3.1.11",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",

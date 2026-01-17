@@ -5,7 +5,7 @@ POST http://localhost:3061/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "niyigabatheo10@gmail.com",
   "password": "password123",
   "name": "Test User"
 }
@@ -53,7 +53,7 @@ POST http://localhost:3061/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "niyigabatheo10@gmail.com",
   "password": "password123"
 }
 
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "wrongpassword"
+  "password": "password123"
 }
 
 ### 8. Login - Missing Fields
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 ### 9. Get Profile - Success (Replace TOKEN with actual token from login)
 GET http://localhost:3061/api/auth/profile
-Authorization: Bearer TOKEN
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTZiNTI4NDI1MzFlMTNlYjhkMmQ1NDAiLCJpYXQiOjE3Njg2NDExNTYsImV4cCI6MTc2ODcyNzU1Nn0.voBBh7DgGn_3E-I_MRkx-2M5trxueX0KAybFngX-D7Q
 
 ### 10. Get Profile - No Token
 GET http://localhost:3061/api/auth/profile

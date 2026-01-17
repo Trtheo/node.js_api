@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getCart, getCartItem, addCartItem, updateCartItem, deleteCartItem, clearCart } from '../controllers/cartController';
 import { validateCartItem } from '../middleware/validation';
-import { auth } from '../middleware/auth';
+import { auth, requireBuyer } from '../middleware/auth';
 
 const router = Router();
 
@@ -10,22 +10,38 @@ const router = Router();
  * /api/cart:
  *   get:
  *     tags: [Cart]
- *     summary: Get user cart
+ *     summary: Get user cart (Buyer only)
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Cart details
+ *         description: Cart retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 cart:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: array
+ *                       items: { $ref: '#/components/schemas/CartItem' }
+ *                     totalAmount: { type: number }
+ *       403:
+ *         description: Insufficient permissions
  *   delete:
  *     tags: [Cart]
- *     summary: Clear cart
+ *     summary: Clear cart (Buyer only)
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Cart cleared
+ *         description: Cart cleared successfully
+ *       403:
+ *         description: Insufficient permissions
  */
-router.get('/', auth, getCart);
+router.get('/', auth, requireBuyer, getCart);
 
 /**
  * @swagger
@@ -44,14 +60,14 @@ router.get('/', auth, getCart);
  *       200:
  *         description: Cart item details
  */
-router.get('/items/:id', auth, getCartItem);
+router.get('/items/:id', auth, requireBuyer, getCartItem);
 
 /**
  * @swagger
  * /api/cart/items:
  *   post:
  *     tags: [Cart]
- *     summary: Add item to cart
+ *     summary: Add item to cart (Buyer only)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -66,9 +82,20 @@ router.get('/items/:id', auth, getCartItem);
  *               quantity: { type: integer, minimum: 1 }
  *     responses:
  *       201:
- *         description: Item added to cart
+ *         description: Item added to cart successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string }
+ *                 cartItem: { $ref: '#/components/schemas/CartItem' }
+ *       400:
+ *         description: Validation error
+ *       403:
+ *         description: Insufficient permissions
  */
-router.post('/items', auth, validateCartItem, addCartItem);
+router.post('/items', auth, requireBuyer, validateCartItem, addCartItem);
 
 /**
  * @swagger
@@ -130,9 +157,9 @@ router.post('/items', auth, validateCartItem, addCartItem);
  *       200:
  *         description: Item removed from cart
  */
-router.put('/items/:id', auth, updateCartItem);
-router.patch('/items/:id', auth, updateCartItem);
-router.delete('/items/:id', auth, deleteCartItem);
-router.delete('/', auth, clearCart);
+router.put('/items/:id', auth, requireBuyer, updateCartItem);
+router.patch('/items/:id', auth, requireBuyer, updateCartItem);
+router.delete('/items/:id', auth, requireBuyer, deleteCartItem);
+router.delete('/', auth, requireBuyer, clearCart);
 
 export default router;

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getCategories, getCategory, createCategory, updateCategory, deleteCategory } from '../controllers/categoryController';
 import { validateCategory } from '../middleware/validation';
-import { auth } from '../middleware/auth';
+import { auth, requireSeller } from '../middleware/auth';
 
 const router = Router();
 
@@ -10,10 +10,15 @@ const router = Router();
  * /api/categories:
  *   get:
  *     tags: [Categories]
- *     summary: Get all categories
+ *     summary: Get all categories (Public)
  *     responses:
  *       200:
- *         description: List of categories
+ *         description: Categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: { $ref: '#/components/schemas/Category' }
  */
 router.get('/', getCategories);
 
@@ -39,7 +44,7 @@ router.get('/:id', getCategory);
  * /api/categories:
  *   post:
  *     tags: [Categories]
- *     summary: Create a new category
+ *     summary: Create a new category (Seller/Admin only)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -48,15 +53,26 @@ router.get('/:id', getCategory);
  *         application/json:
  *           schema:
  *             type: object
- *             required: [name, description]
+ *             required: [name]
  *             properties:
  *               name: { type: string }
  *               description: { type: string }
  *     responses:
  *       201:
- *         description: Category created
+ *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string }
+ *                 category: { $ref: '#/components/schemas/Category' }
+ *       400:
+ *         description: Validation error
+ *       403:
+ *         description: Insufficient permissions
  */
-router.post('/', auth, validateCategory, createCategory);
+router.post('/', auth, requireSeller, validateCategory, createCategory);
 
 /**
  * @swagger
@@ -119,8 +135,8 @@ router.post('/', auth, validateCategory, createCategory);
  *       200:
  *         description: Category deleted
  */
-router.put('/:id', auth, validateCategory, updateCategory);
-router.patch('/:id', auth, updateCategory);
-router.delete('/:id', auth, deleteCategory);
+router.put('/:id', auth, requireSeller, validateCategory, updateCategory);
+router.patch('/:id', auth, requireSeller, updateCategory);
+router.delete('/:id', auth, requireSeller, deleteCategory);
 
 export default router;
