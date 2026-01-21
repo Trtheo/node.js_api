@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development npx ts-node src/server.ts",
     "start": "NODE_ENV=production node dist/server.js",
-    "build": "tsc",
+    "build": "npx tsc",
     "swagger:dev": "NODE_ENV=development npx ts-node src/server.ts",
     "swagger:prod": "NODE_ENV=production node dist/server.js",
     "seed:all": "npx ts-node -e \"import('./src/utils/seeding').then(m => m.seedAll())\"",
