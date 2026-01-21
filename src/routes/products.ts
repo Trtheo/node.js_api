@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getProducts, getProduct, createProduct, updateProduct, deleteProduct } from '../controllers/productController';
 import { validateProduct } from '../middleware/validation';
 import { auth, requireSeller } from '../middleware/auth';
+import { upload } from '../services/uploadService';
 
 const router = Router();
 
@@ -95,44 +96,75 @@ router.get('/:id', getProduct);
  * /api/products:
  *   post:
  *     tags: [Products]
- *     summary: Create a new product (Seller/Admin only)
+ *     summary: Create a new product with images (Seller/Admin only)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required: [name, price, categoryId, quantity]
  *             properties:
- *               name: { type: string }
- *               price: { type: number, minimum: 0 }
- *               description: { type: string }
- *               categoryId: { type: string }
- *               inStock: { type: boolean }
- *               quantity: { type: integer, minimum: 0 }
- *               images: { type: array, items: { type: string } }
- *               brand: { type: string }
- *               sku: { type: string }
- *               tags: { type: array, items: { type: string } }
- *               featured: { type: boolean }
+ *               name: 
+ *                 type: string
+ *                 example: "iPhone 15 Pro"
+ *               price: 
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 999.99
+ *               description: 
+ *                 type: string
+ *                 example: "Latest iPhone model"
+ *               categoryId: 
+ *                 type: string
+ *                 example: "electronics-category-id"
+ *               inStock: 
+ *                 type: boolean
+ *                 example: true
+ *               quantity: 
+ *                 type: integer
+ *                 minimum: 0
+ *                 example: 50
+ *               brand: 
+ *                 type: string
+ *                 example: "Apple"
+ *               sku: 
+ *                 type: string
+ *                 example: "IPHONE15PRO"
+ *               tags: 
+ *                 type: string
+ *                 example: "smartphone,apple,premium"
+ *               featured: 
+ *                 type: boolean
+ *                 example: true
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 maxItems: 5
+ *                 description: "Product images (JPG, PNG, GIF, WEBP - Max 5MB each, up to 5 images)"
  *     responses:
  *       201:
- *         description: Product created successfully
+ *         description: Product created successfully with images
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message: { type: string }
- *                 product: { $ref: '#/components/schemas/Product' }
+ *                 message: 
+ *                   type: string
+ *                   example: "Product created successfully"
+ *                 product:
+ *                   $ref: '#/components/schemas/Product'
  *       400:
  *         description: Validation error
  *       403:
  *         description: Insufficient permissions
  */
-router.post('/', auth, requireSeller, validateProduct, createProduct);
+router.post('/', auth, requireSeller, upload.array('images', 5), validateProduct, createProduct);
 
 /**
  * @swagger
@@ -203,7 +235,7 @@ router.post('/', auth, requireSeller, validateProduct, createProduct);
  *       200:
  *         description: Product deleted
  */
-router.put('/:id', auth, requireSeller, validateProduct, updateProduct);
+router.put('/:id', auth, requireSeller, upload.array('images', 5), validateProduct, updateProduct);
 router.patch('/:id', auth, requireSeller, updateProduct);
 router.delete('/:id', auth, requireSeller, deleteProduct);
 

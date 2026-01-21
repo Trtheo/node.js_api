@@ -99,8 +99,20 @@ This is a full-featured e-commerce REST API built with Node.js, Express, TypeScr
 ### Reviews
 - `POST /api/reviews` - Create review (Buyer+)
 - `GET /api/reviews/product/:productId` - Get product reviews (Public)
+- `GET /api/reviews/user/me` - Get user's reviews with product info (Buyer+)
 - `PUT /api/reviews/:id` - Update review (Buyer+)
 - `DELETE /api/reviews/:id` - Delete review (Buyer+)
+
+### Upload
+- `POST /api/upload/image` - Upload single image
+- `POST /api/upload/images` - Upload multiple images
+- `POST /api/upload/avatar` - Upload user avatar
+
+### Statistics
+- `GET /api/stats/products` - Product statistics by category (Seller+)
+- `GET /api/stats/top-products` - Top products by price (Seller+)
+- `GET /api/stats/low-stock` - Low stock alerts (Seller+)
+- `GET /api/stats/price-distribution` - Price distribution (Seller+)
 
 ## Data Models
 
@@ -284,15 +296,63 @@ This is a full-featured e-commerce REST API built with Node.js, Express, TypeScr
 - CORS enabled
 - Request logging with Morgan
 
-## Email Configuration
-Set up email service in `.env`:
+## Advanced Features
+
+### 📧 Email Notifications
+- User registration activation emails
+- Password reset emails
+- Password change confirmations
+- Order confirmation emails
+- Order status update notifications
+
+### 📁 File Upload
+- Image upload with Multer + Cloudinary
+- File validation (images only, 1MB limit)
+- Avatar and product image support
+- Automatic image optimization
+
+### 📊 Statistics & Analytics
+- Product statistics by category
+- Top products by price
+- Low stock alerts
+- Price distribution analysis
+
+### 🗄️ Database Features
+- Comprehensive indexing for performance
+- MongoDB transactions for data consistency
+- Database seeding for development
+- Population and references for related data
+
+## Database Scripts
+
+### Seeding
+- `npm run seed:all` - Seed all data (users, categories, products, reviews)
+- `npm run seed:users` - Seed users only
+- `npm run seed:products` - Seed products only
+- `npm run seed:reviews` - Seed reviews only
+
+## Complete Environment Variables
 ```env
+PORT=3061
+MONGODB_URI=mongodb://localhost:27017/ecommerce
+JWT_SECRET=your-secret-key
+NODE_ENV=development
+
+# Email Configuration
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
-SMTP_FROM=noreply@ecommerce.com
-CLIENT_URL=http://localhost:3000
+SMTP_FROM=your-email@gmail.com
+CLIENT_URL=http://localhost:3061/api/auth
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# Production
+PRODUCTION_URL=https://your-production-url.com
 ```
 
 ## Getting Started
@@ -302,6 +362,17 @@ CLIENT_URL=http://localhost:3000
 3. Start MongoDB
 4. Run: `npm run dev`
 5. Access API documentation: `http://localhost:3061/api-docs`
+6. Check API health: `http://localhost:3061/health`
+
+## API Documentation
+
+### Local Development
+- **Swagger UI**: `http://localhost:3061/api-docs`
+- **Health Check**: `http://localhost:3061/health`
+
+### Production
+- **Swagger UI**: `https://your-production-url.com/api-docs`
+- **Health Check**: `https://your-production-url.com/health`
 
 
 

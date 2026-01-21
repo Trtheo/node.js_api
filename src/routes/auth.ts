@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { register, login, getProfile, updateProfile, forgotPassword, resetPassword, activateAccount, getAllUsers, getUserById, updateUser, deleteUser } from '../controllers/authController';
 import { validateRegister, validateLogin, validateForgotPassword, validateResetPassword } from '../middleware/validation';
 import { auth, requireAdmin } from '../middleware/auth';
+import { upload } from '../services/uploadService';
 
 const router = Router();
 
@@ -145,7 +146,7 @@ router.post('/login', validateLogin, login);
  *         description: Unauthorized
  */
 router.get('/profile', auth, getProfile);
-router.put('/profile', auth, updateProfile);
+router.put('/profile', auth, upload.single('avatar'), updateProfile);
 
 /**
  * @swagger
@@ -198,9 +199,7 @@ router.post('/forgot-password', validateForgotPassword, forgotPassword);
  *       400:
  *         description: Invalid or expired token
  */
-/**
- * @swagger
- * /api/auth/activate/{token}:
+router.post('/reset-password', validateResetPassword, resetPassword);
  *   get:
  *     tags: [Authentication]
  *     summary: Activate user account with email token

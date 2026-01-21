@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User';
-import { sendActivationEmail, sendPasswordResetEmail } from '../services/emailService';
+import { sendActivationEmail, sendPasswordResetEmail, sendPasswordChangedEmail } from '../services/emailService';
+import { uploadToCloudinary } from '../services/uploadService';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -91,10 +92,18 @@ export const updateProfile = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     const { name, profile, address } = req.body;
+    const file = req.file;
+    
+    let updateData: any = { name, profile, address };
+    
+    if (file) {
+      const avatarUrl = await uploadToCloudinary(file, 'avatars');
+      updateData.profile = { ...profile, avatar: avatarUrl };
+    }
     
     const user = await User.findByIdAndUpdate(
       userId,
-      { name, profile, address },
+      updateData,
       { new: true, runValidators: true }
     ).select('-password');
     
@@ -155,6 +164,13 @@ export const resetPassword = async (req: Request, res: Response) => {
     user.resetPasswordExpires = undefined;
     await user.save();
     
+    // Send password changed confirmation email
+    try {
+      await sendPasswordChangedEmail(user.email, user.name);
+    } catch (emailError) {
+      console.error('Failed to send password changed email:', emailError);
+    }
+    
     res.json({ message: 'Password reset successfully' });
   } catch (error: any) {
     res.status(500).json({ error: 'Internal server error' });
@@ -171,7 +187,28 @@ export const activateAccount = async (req: Request, res: Response) => {
     });
     
     if (!user) {
-      return res.status(400).json({ error: 'Invalid or expired activation token' });
+      return res.status(400).send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Activation Failed</title>
+          <style>
+            body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+            .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+            .error { color: #dc3545; }
+            .icon { font-size: 64px; margin-bottom: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="icon">❌</div>
+            <h1 class="error">Activation Failed</h1>
+            <p>Invalid or expired activation token.</p>
+            <p>Please request a new activation email or contact support.</p>
+          </div>
+        </body>
+        </html>
+      `);
     }
     
     user.emailVerified = true;
@@ -181,13 +218,58 @@ export const activateAccount = async (req: Request, res: Response) => {
     
     const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
     
-    res.json({ 
-      message: 'Account activated successfully',
-      token: jwtToken,
-      user: { id: user._id, email: user.email, name: user.name, role: user.role }
-    });
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Account Activated</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+          .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+          .success { color: #28a745; }
+          .icon { font-size: 64px; margin-bottom: 20px; }
+          .token { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; word-break: break-all; font-family: monospace; }
+          .btn { background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="icon">✅</div>
+          <h1 class="success">Account Activated Successfully!</h1>
+          <p>Welcome to E-Commerce, <strong>${user.name || user.email}</strong>!</p>
+          <p>Your account has been activated and you can now login.</p>
+          <div class="token">
+            <strong>Your Login Token:</strong><br>
+            ${jwtToken}
+          </div>
+          <p><small>Copy this token to use for API authentication</small></p>
+          <a href="http://localhost:3061/api-docs" class="btn">View API Documentation</a>
+        </div>
+      </body>
+      </html>
+    `);
   } catch (error: any) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Server Error</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+          .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+          .error { color: #dc3545; }
+          .icon { font-size: 64px; margin-bottom: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="icon">⚠️</div>
+          <h1 class="error">Server Error</h1>
+          <p>Something went wrong. Please try again later.</p>
+        </div>
+      </body>
+      </html>
+    `);
   }
 };
 

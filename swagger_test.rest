@@ -1,0 +1,11 @@
+### Test Swagger Documentation
+
+### Local Development
+GET http://localhost:3061/api-docs
+
+### Check API Health
+GET http://localhost:3061/api/auth/profile
+Authorization: Bearer invalid-token
+
+### Production Test (Update URL as needed)
+# GET https://your-production-url.com/api-docs

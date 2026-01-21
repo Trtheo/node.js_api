@@ -1,0 +1,36 @@
+### === FILE UPLOAD TESTS ===
+
+### Upload Single Image
+POST http://localhost:3061/api/upload/image
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+<  /home/theophile/Pictures/me.jpeg
+
+### Upload Multiple Images
+POST http://localhost:3061/api/upload/images
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+< ./image1.jpg
+< ./image2.jpg
+
+### Upload Avatar
+POST http://localhost:3061/api/upload/avatar
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+< ./avatar.jpg
+
+### === VALIDATION TESTS ===
+
+### Upload without file (Should fail)
+POST http://localhost:3061/api/upload/image
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+### Upload without auth (Should fail)
+POST http://localhost:3061/api/upload/image
+Content-Type: multipart/form-data
+
+< /home/theophile/Pictures/me.jpeg

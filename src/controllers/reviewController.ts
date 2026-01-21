@@ -100,3 +100,14 @@ const updateProductRating = async (productId: string) => {
     reviewCount: reviews.length
   });
 };
+export const getUserReviews = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const reviews = await Review.find({ userId })
+      .populate('productId', 'name price images')
+      .sort({ createdAt: -1 });
+    res.json({ reviews });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Product } from '../models/Product';
 import { Category } from '../models/Category';
+import { uploadToCloudinary } from '../services/uploadService';
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -78,13 +79,20 @@ export const createProduct = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.body;
     const sellerId = (req as any).userId;
+    const files = req.files as Express.Multer.File[];
     
     const categoryExists = await Category.findById(categoryId);
     if (!categoryExists) {
       return res.status(400).json({ error: 'Category does not exist' });
     }
     
-    const product = new Product({ _id: uuidv4(), ...req.body, sellerId });
+    let images: string[] = [];
+    if (files && files.length > 0) {
+      const uploadPromises = files.map(file => uploadToCloudinary(file, 'products'));
+      images = await Promise.all(uploadPromises);
+    }
+    
+    const product = new Product({ _id: uuidv4(), ...req.body, sellerId, images });
     await product.save();
     res.status(201).json({ message: 'Product created successfully', product });
   } catch (error: any) {
@@ -101,6 +109,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     const { categoryId } = req.body;
     const sellerId = (req as any).userId;
     const userRole = (req as any).userRole;
+    const files = req.files as Express.Multer.File[];
     
     if (categoryId) {
       const categoryExists = await Category.findById(categoryId);
@@ -109,8 +118,16 @@ export const updateProduct = async (req: Request, res: Response) => {
       }
     }
     
+    let updateData = { ...req.body };
+    
+    if (files && files.length > 0) {
+      const uploadPromises = files.map(file => uploadToCloudinary(file, 'products'));
+      const newImages = await Promise.all(uploadPromises);
+      updateData.images = newImages;
+    }
+    
     const query = userRole === 'admin' ? { _id: req.params.id } : { _id: req.params.id, sellerId };
-    const product = await Product.findOneAndUpdate(query, req.body, { new: true, runValidators: true });
+    const product = await Product.findOneAndUpdate(query, updateData, { new: true, runValidators: true });
     
     if (!product) return res.status(404).json({ error: 'Product not found or unauthorized' });
     res.json({ message: 'Product updated successfully', product });

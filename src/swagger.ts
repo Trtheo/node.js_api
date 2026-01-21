@@ -6,13 +6,13 @@ const getServers = () => {
   if (isProduction) {
     return [{
       url: process.env.PRODUCTION_URL || 'https://node-js-api-zw1r.onrender.com',
-      description: 'Production'
+      description: 'Production Server'
     }];
   }
   
   return [{
     url: `http://localhost:${process.env.PORT || 3061}`,
-    description: 'Local Development'
+    description: 'Local Development Server'
   }];
 };
 
@@ -25,6 +25,44 @@ const options: swaggerJsdoc.Options = {
       description: 'Full-featured e-commerce REST API with authentication, products, cart, orders, and reviews',
     },
     servers: getServers(),
+    tags: [
+      {
+        name: 'Authentication',
+        description: 'User authentication and account management'
+      },
+      {
+        name: 'Admin',
+        description: 'Admin user management endpoints'
+      },
+      {
+        name: 'Categories',
+        description: 'Product category management'
+      },
+      {
+        name: 'Products',
+        description: 'Product management and search'
+      },
+      {
+        name: 'Cart',
+        description: 'Shopping cart management'
+      },
+      {
+        name: 'Orders',
+        description: 'Order management and tracking'
+      },
+      {
+        name: 'Reviews',
+        description: 'Product reviews and ratings'
+      },
+      {
+        name: 'Upload',
+        description: 'File upload endpoints'
+      },
+      {
+        name: 'Statistics',
+        description: 'Analytics and reporting'
+      }
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -149,6 +187,26 @@ const options: swaggerJsdoc.Options = {
           type: 'object',
           properties: {
             error: { type: 'string' }
+          }
+        },
+        UploadResponse: {
+          type: 'object',
+          properties: {
+            message: { type: 'string' },
+            imageUrl: { type: 'string' },
+            imageUrls: { type: 'array', items: { type: 'string' } },
+            avatarUrl: { type: 'string' }
+          }
+        },
+        Stats: {
+          type: 'object',
+          properties: {
+            categoryName: { type: 'string' },
+            totalProducts: { type: 'integer' },
+            avgPrice: { type: 'number' },
+            minPrice: { type: 'number' },
+            maxPrice: { type: 'number' },
+            totalStock: { type: 'integer' }
           }
         }
       },

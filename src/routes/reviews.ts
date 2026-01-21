@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createReview, getProductReviews, updateReview, deleteReview } from '../controllers/reviewController';
+import { createReview, getProductReviews, updateReview, deleteReview, getUserReviews } from '../controllers/reviewController';
 import { validateReview } from '../middleware/validation';
 import { auth, requireBuyer } from '../middleware/auth';
 
@@ -108,3 +108,16 @@ export default router;
  *       404:
  *         description: Review not found
  */
+/**
+ * @swagger
+ * /api/reviews/user/me:
+ *   get:
+ *     tags: [Reviews]
+ *     summary: Get current user's reviews with product info
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User reviews retrieved successfully
+ */
+router.get('/user/me', auth, requireBuyer, getUserReviews);

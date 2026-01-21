@@ -46,3 +46,53 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
   await transporter.sendMail(mailOptions);
 };
+export const sendPasswordChangedEmail = async (email: string, name?: string) => {
+  const mailOptions = {
+    from: process.env.SMTP_FROM || 'noreply@ecommerce.com',
+    to: email,
+    subject: 'Password Successfully Changed',
+    html: `
+      <h2>Password Changed</h2>
+      <p>Hello ${name || 'User'},</p>
+      <p>Your password has been successfully changed.</p>
+      <p>If you didn't make this change, please contact support immediately.</p>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+export const sendOrderConfirmationEmail = async (email: string, orderData: any) => {
+  const mailOptions = {
+    from: process.env.SMTP_FROM || 'noreply@ecommerce.com',
+    to: email,
+    subject: 'Order Confirmation',
+    html: `
+      <h2>Order Placed Successfully!</h2>
+      <p>Thank you for your order. Here are the details:</p>
+      <p><strong>Order ID:</strong> ${orderData.id}</p>
+      <p><strong>Total Amount:</strong> $${orderData.totalAmount}</p>
+      <p><strong>Status:</strong> ${orderData.status}</p>
+      <p>We'll send you updates as your order progresses.</p>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+export const sendOrderStatusEmail = async (email: string, orderData: any) => {
+  const mailOptions = {
+    from: process.env.SMTP_FROM || 'noreply@ecommerce.com',
+    to: email,
+    subject: `Order ${orderData.status}`,
+    html: `
+      <h2>Order Status Update</h2>
+      <p>Your order status has been updated:</p>
+      <p><strong>Order ID:</strong> ${orderData.id}</p>
+      <p><strong>New Status:</strong> ${orderData.status}</p>
+      <p><strong>Total Amount:</strong> $${orderData.totalAmount}</p>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+};
