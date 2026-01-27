@@ -237,22 +237,18 @@ export const activateAccount = async (req: Request, res: Response) => {
           body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
           .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
           .success { color: #28a745; }
-          .icon { font-size: 64px; margin-bottom: 20px; }
-          .token { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; word-break: break-all; font-family: monospace; }
+          .icon { width: 64px; height: 64px; margin: 0 auto 20px; }
           .btn { background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+          .login-btn { background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 10px; }
         </style>
       </head>
       <body>
         <div class="container">
-          <div class="icon">✅</div>
+          <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Success" class="icon">
           <h1 class="success">Account Activated Successfully!</h1>
-          <p>Welcome to E-Commerce, <strong>${user.name || user.email}</strong>!</p>
+          <p>Welcome to E-Commerce, <strong>${user.profile.firstName} ${user.profile.lastName}</strong>!</p>
           <p>Your account has been activated and you can now login.</p>
-          <div class="token">
-            <strong>Your Login Token:</strong><br>
-            ${jwtToken}
-          </div>
-          <p><small>Copy this token to use for API authentication</small></p>
+          <a href="http://localhost:3061/api-docs" class="login-btn">Login via API</a>
           <a href="http://localhost:3061/api-docs" class="btn">View API Documentation</a>
         </div>
       </body>
