@@ -7,7 +7,7 @@ import { uploadToCloudinary } from '../services/uploadService';
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -18,8 +18,11 @@ export const register = async (req: Request, res: Response) => {
     const user = new User({ 
       email, 
       password, 
-      name, 
       role,
+      profile: {
+        firstName,
+        lastName
+      },
       activationToken,
       activationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
     });
@@ -35,7 +38,14 @@ export const register = async (req: Request, res: Response) => {
     
     res.status(201).json({ 
       message: 'User registered successfully. Please check your email to activate your account.',
-      user: { id: user._id, email: user.email, name: user.name, role: user.role, emailVerified: user.emailVerified }
+      user: { 
+        id: user._id, 
+        email: user.email, 
+        firstName: user.profile.firstName, 
+        lastName: user.profile.lastName, 
+        role: user.role, 
+        emailVerified: user.emailVerified 
+      }
     });
   } catch (error: any) {
     if (error.name === 'ValidationError') {

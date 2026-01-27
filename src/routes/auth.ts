@@ -18,11 +18,12 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required: [email, password]
+ *             required: [firstName, lastName, email, password]
  *             properties:
+ *               firstName: { type: string }
+ *               lastName: { type: string }
  *               email: { type: string, format: email }
  *               password: { type: string, minLength: 6 }
- *               name: { type: string }
  *               role: { type: string, enum: [buyer, seller, admin], default: buyer }
  *     responses:
  *       201:
@@ -38,7 +39,8 @@ const router = Router();
  *                   properties:
  *                     id: { type: string }
  *                     email: { type: string }
- *                     name: { type: string }
+ *                     firstName: { type: string }
+ *                     lastName: { type: string }
  *                     role: { type: string }
  *                     emailVerified: { type: boolean, example: false }
  *       400:
@@ -200,6 +202,10 @@ router.post('/forgot-password', validateForgotPassword, forgotPassword);
  *         description: Invalid or expired token
  */
 router.post('/reset-password', validateResetPassword, resetPassword);
+
+/**
+ * @swagger
+ * /api/auth/activate/{token}:
  *   get:
  *     tags: [Authentication]
  *     summary: Activate user account with email token

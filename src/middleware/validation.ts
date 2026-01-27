@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { UserRole } from '../models/User';
 
 export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
-  const { email, password, role } = req.body;
+  const { firstName, lastName, email, password, role } = req.body;
   
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ error: 'First name, last name, email and password are required' });
   }
   
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

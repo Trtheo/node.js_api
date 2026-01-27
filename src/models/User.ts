@@ -54,8 +54,8 @@ const userSchema = new mongoose.Schema({
     default: UserRole.BUYER
   },
   profile: {
-    firstName: { type: String, trim: true },
-    lastName: { type: String, trim: true },
+    firstName: { type: String, required: [true, 'First name is required'], trim: true },
+    lastName: { type: String, required: [true, 'Last name is required'], trim: true },
     phone: { type: String, trim: true },
     dateOfBirth: Date,
     avatar: String
